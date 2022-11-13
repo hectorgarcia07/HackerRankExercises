@@ -3,7 +3,7 @@
  * @return {number}
  */
  var romanToInt = function(s) {
-    const key = {
+    const map = {
         'I': 1,
         'V': 5,
         'X': 10,
@@ -12,47 +12,51 @@
         'D': 500,
         'M': 1000
     }
-    let isTrigger = false
-    let val = 0
-    let sChar = s.split('')
-
-    return sChar.reduce((total, str, index) => {
-        console.log(isTrigger, val)
-        if(!isTrigger && index != sChar.length && str == 'I' ||str == 'X' || str == 'C' ){
-            val = str
-            isTrigger = true
-            return total
+    let total = 0
+    
+    for(let i = 0, len = s.length; i < len; i++){
+        if(s[i] != 'I' && s[i] != 'X' && s[i] != 'C'){
+            total += map[s[i]]
         }
-        else if(isTrigger && val == 'I'){
-            isTrigger = false
-            if(str == 'V'){
-                return total + 4
-            } else if(str == 'X'){
-                return total + 9
+        else if(s[i] == 'I' ){
+            if(s[i + 1] == 'V'){
+                total += 4
+                i++
+            }
+            else if(s[i + 1] == 'X'){
+                total += 9
+                i++
+            }
+            else{
+                total += 1
             }
         }
-        else if(isTrigger && val == 'X'){
-            isTrigger = false
-            if(str == 'L'){
-                return total + 40
-            } else if(str == 'C'){
-                return total + 90
+        else if(s[i] == 'X' ){
+            if(s[i + 1] == 'L'){
+                total += 40
+                i++
+            }
+            else if(s[i + 1] == 'C'){
+                total += 90
+                i++
+            }
+            else{
+                total += 10
             }
         }
-        else if(isTrigger && val == 'C'){
-            isTrigger = false
-            if(str == 'D'){
-                return total + 400
-            } else if(str == 'M'){
-                return total + 900
+        else if(s[i] == 'C' ){
+            if(s[i + 1] == 'D'){
+                total += 400
+                i++
+            }
+            else if(s[i + 1] == 'M'){
+                total += 900
+                i++
+            }
+            else{
+                total += 100
             }
         }
-        
-        if(isTrigger){
-            isTrigger = false
-            return total + key[val] + key[str]
-        }
-
-        return total + key[str]
-    }, 0)
+    }
+    return total
 };
